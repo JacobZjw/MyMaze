@@ -1,7 +1,5 @@
-﻿
-// MyMaze.cpp: 定义应用程序的类行为。
+﻿// MyMaze.cpp: 定义应用程序的类行为。
 //
-
 #include "pch.h"
 #include "framework.h"
 #include "afxwinappex.h"
@@ -29,7 +27,7 @@ END_MESSAGE_MAP()
 
 // CMyMazeApp 构造
 
-CMyMazeApp::CMyMazeApp() noexcept
+CMyMazeApp::CMyMazeApp() 
 {
 	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
@@ -49,13 +47,6 @@ CMyMazeApp::CMyMazeApp() noexcept
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
-//CMyMazeApp::CMyMazeApp()noexcept
-//{
-//	//以下应用程序 ID 字符串为应用程序唯一的 ID 字符串；一般来说字符串格式
-//	//为 CompanyName.ProductName.SubProduct.VersionInformation
-//	SetAppID(_T("Sine.World.Game.0.1"));
-//}
-// 唯一的 CMyMazeApp 对象
 
 CMyMazeApp theApp;
 
@@ -85,9 +76,7 @@ BOOL CMyMazeApp::InitInstance()
 	}
 
 	AfxEnableControlContainer();
-
 	EnableTaskbarInteraction(FALSE);
-	SetRegistryKey(_T("Sine-World"));
 
 	// 使用 RichEdit 控件需要 AfxInitRichEdit2()
 	// AfxInitRichEdit2();
@@ -99,9 +88,9 @@ BOOL CMyMazeApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	//LoadStdProfileSettings(4);  // 加载标准 INI 文件选项(包括 MRU)
+	LoadStdProfileSettings(4);  // 加载标准 INI 文件选项(包括 MRU)
 
 
 	// 注册应用程序的文档模板。  文档模板
@@ -134,6 +123,8 @@ BOOL CMyMazeApp::InitInstance()
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+	//允许使用将文件拖进窗口内释放的方式打开文件，系统自动生成
+	m_pMainWnd->DragAcceptFiles();
 	return TRUE;
 }
 
@@ -141,7 +132,6 @@ int CMyMazeApp::ExitInstance()
 {
 	//TODO: 处理可能已添加的附加资源
 	AfxOleTerm(FALSE);
-
 	return CWinApp::ExitInstance();
 }
 
@@ -153,7 +143,8 @@ int CMyMazeApp::ExitInstance()
 class CAboutDlg : public CDialogEx
 {
 public:
-	CAboutDlg() noexcept;
+	CAboutDlg() : CDialogEx(CAboutDlg::IDD) {}
+	enum { IDD = IDD_ABOUTBOX };
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -162,15 +153,9 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-
-// 实现
-protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)
-{
-}
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {

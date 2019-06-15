@@ -3,25 +3,14 @@
 
 Maze::Maze()
 {
-	srand((unsigned)time(NULL));
 	//生成二维数组
-	maze = (int**)malloc(L * sizeof(int*));
+	maze = (char**)malloc(L * sizeof(char*));
 	for (int i = 0; i < L; i++)
-	{
-		maze[i] = (int*)calloc(L, sizeof(int));
-	}
+		maze[i] = (char*)calloc(L , sizeof(char));
 
-	//将最外层设置成路
+	/*maze = new char* [L];
 	for (int i = 0; i < L; i++)
-	{
-		maze[0][i] = ROUTE;
-		maze[i][0] = ROUTE;
-		maze[L - 1][i] = ROUTE;
-		maze[i][L - 1] = ROUTE;
-	}
-
-	//设置入口
-	maze[2][1] = ROUTE;
+		maze[i] = new char[L];*/
 }
 
 Maze::~Maze()
@@ -30,12 +19,40 @@ Maze::~Maze()
 	for (int i = 0; i < L; i++)
 		free(maze[i]);
 	free(maze);
+
+	/*for (int i = 0; i < L; i++)
+		delete[]maze[i];
+	delete[]maze;*/
+}
+
+void Maze::BeforeNew()
+{
+	if (maze != NULL)
+	{
+		//默认所有位置是墙
+		for (int i = 0; i < L; i++)
+			for (int j = 0; j < L; j++)
+				maze[i][j] = WALL;
+
+		//将最外层设置成路
+		for (int i = 0; i < L; i++)
+		{
+			maze[0][i] = ROUTE;
+			maze[i][0] = ROUTE;
+			maze[L - 1][i] = ROUTE;
+			maze[i][L - 1] = ROUTE;
+		}
+		//设置入口
+		maze[2][1] = ROUTE;
+		//挖墙起点
+		tx = 2; ty = 2;
+	}
 }
 
 //生成迷宫
-void Maze::CreateMaze(int** maze, int x, int y)
+void Maze::CreateMaze()
 {
-	maze[x][y] = ROUTE;
+	maze[tx][ty] = ROUTE;
 	//方向设置
 	int direction[4][2] = { { 1,0 },{ -1,0 },{ 0,1 },{ 0,-1 } };
 	//随机设置方向
@@ -50,7 +67,7 @@ void Maze::CreateMaze(int** maze, int x, int y)
 		direction[0][1] = direction[r][1];
 		direction[r][1] = temp;
 	}
-
+	int x = tx, y = ty;
 	//循环控制方向
 	for (int i = 0; i < 4; i++)
 	{
@@ -86,11 +103,14 @@ void Maze::CreateMaze(int** maze, int x, int y)
 			maze[dx][dy] = ROUTE;
 		}
 		if (range <= 0)
-			CreateMaze(maze, dx, dy);
+		{
+			tx = dx; ty = dy;
+			CreateMaze();
+		}
 	}
 }
 
-void Maze::SearchExit(int** maze)
+void Maze::SearchExit()
 {
 	//寻找出口
 	for (int i = L - 3; i > 0; i--)
@@ -102,7 +122,7 @@ void Maze::SearchExit(int** maze)
 		}
 	}
 }
-int** Maze::GetMaze()
+char** Maze::GetMaze()
 {
 	return maze;
 }

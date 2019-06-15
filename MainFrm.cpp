@@ -27,8 +27,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
-	/*cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE
-		 | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;*/
 	cs.style = WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX | /*WS_MAXIMIZEBOX |*/ WS_SYSMENU;
 	cs.cx = 580;
 	cs.cy = 630;

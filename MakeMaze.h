@@ -9,20 +9,23 @@
 #define L 44
 
 //墙和路径的标识
-#define WALL  0
-#define ROUTE 1
+#define WALL   '0'
+#define ROUTE  '1'
+
 
 //控制迷宫的复杂度
 static int Rank = 0;
 
 class Maze
 {
-
 public:	
-	int** maze;
 	Maze();
 	virtual ~Maze();
-	void CreateMaze(int** maze, int x, int y);
-	void SearchExit(int** maze);
-	int** GetMaze();
+	void CreateMaze();
+	void SearchExit();
+	char** GetMaze();
+	void BeforeNew();
+protected:
+	char** maze;
+	int tx, ty;
 };

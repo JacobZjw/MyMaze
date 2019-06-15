@@ -1,6 +1,5 @@
 ﻿// MyMazeView.cpp: CMyMazeView 类的实现
 //
-
 #include "pch.h"
 #include "framework.h"
 // SHARED_HANDLERS 可以在实现预览、缩略图和搜索筛选器句柄的
@@ -39,7 +38,8 @@ BOOL CMyMazeView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CMyMazeView 绘图
 #define Start 15 //开始绘图的坐标
-#define cubelong 12//每个小方块的边长
+#define CubeLong 12//每个小方块的边长
+//#define CubeLong 130//每个小方块的边长
 
 void CMyMazeView::OnDraw(CDC* pDC)
 {
@@ -47,54 +47,45 @@ void CMyMazeView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
 	// TODO: 在此处为本机数据添加绘制代码
 
 	//准备内存绘图缓冲区
 	CDC MemDC;
 	MemDC.CreateCompatibleDC(NULL);//创建绘图设备
-
 	CBitmap MemBitmap;
-	//绘图区域大小，可以像这样中直接使用窗口大小，也可以自己计算需要多大的区域
-	MemBitmap.CreateCompatibleBitmap(pDC, 850, 650);
-
-	CBitmap* pOldBit = MemDC.SelectObject(&MemBitmap);//创建绘图区
+	MemBitmap.CreateCompatibleBitmap(pDC, 850, 650);//绘图区域大小，可以像这样中直接使用窗口大小，也可以自己计算需要多大的区域
+	//创建绘图区
+	CBitmap* pOldBit = MemDC.SelectObject(&MemBitmap);
 	MemDC.FillSolidRect(0, 0, 850, 650, RGB(255, 255, 255));//初始化
-
 	//读取文档
-	int** p;
-	p = pDoc->GetMaze();
-
-	//画刷定义
-	int Routec = RGB(0, 0, 0);
+	char** p = pDoc->GetMaze();
+	//定义画刷
+	int Routec = RGB(0,0,0);//黑色是路
 	CBrush RouteBrush(Routec);
-	int Wallc = RGB(255, 255, 255);
+	int Wallc = RGB(255,255,255);//白色是墙
 	CBrush WallBrush(Wallc);
-
 	CBrush* oldBrush;
-	//缓冲区绘图
+
+	//在缓冲区绘图
 	for (int i = 0; i < L; i++)
-	{
 		for (int j = 0; j < L; j++)
-		{
 			switch (p[j][i])
 			{
 			case ROUTE:
 				oldBrush = MemDC.SelectObject(&RouteBrush);
-				MemDC.Rectangle(Start + i * cubelong, Start + j * cubelong, Start + (i + 1) * cubelong, Start + (j + 1) * cubelong);
+				MemDC.Rectangle(Start + i * CubeLong, Start + j * CubeLong, Start + (i + 1) * CubeLong, Start + (j + 1) * CubeLong);
 				MemDC.SelectObject(oldBrush);
 				break;
 			case WALL:
 				oldBrush = MemDC.SelectObject(&WallBrush);
-				MemDC.Rectangle(Start + i * cubelong, Start + j * cubelong, Start + (i + 1) * cubelong, Start + (j + 1) * cubelong);
+				MemDC.Rectangle(Start + i * CubeLong, Start + j * CubeLong, Start + (i + 1) * CubeLong, Start + (j + 1) * CubeLong);
 				MemDC.SelectObject(oldBrush);
 				break;
 			}
-		}
-	}
+
 	//将内存中的图拷贝到屏幕上进行显示 
 	pDC->BitBlt(0, 0, 850, 650, &MemDC, 0, 0, SRCCOPY);
-	//绘图完成后的清理 
+	//绘图完成后清理 
 	MemBitmap.DeleteObject();
 	MemDC.DeleteDC();
 }

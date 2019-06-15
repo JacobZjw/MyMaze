@@ -26,41 +26,33 @@ END_MESSAGE_MAP()
 
 BOOL CMyMazeDoc::OnNewDocument()
 {
-	/*if (!CDocument::OnNewDocument())
-		return FALSE;*/
+	if (!CDocument::OnNewDocument())
+		return FALSE;
 	// TODO: 在此添加重新初始化代码
 	// (SDI 文档将重用该文档)
-	CreateMaze(maze, 2, 2);//生成新迷宫
-	SearchExit(maze);
+	BeforeNew();//
+	CreateMaze();//生成新迷宫
+	SearchExit();
 	
 	return TRUE;
 }
 
 // CMyMazeDoc 序列化
-
 void CMyMazeDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
 		// TODO:  在此添加存储代码
-		for (int i = 0; i <L; i++)//保存迷宫区域
-		{
-			for (int j = 0; j <L; j++)
-			{
+		for (int i = 0; i < L; i++)//保存迷宫区域
+			for (int j = 0; j < L; j++)
 				ar << maze[i][j];
-			}
-		}
 	}
 	else
 	{
 		// TODO:  在此添加加载代码
 		for (int i = 0; i < L; i++)//保存迷宫区域
-		{
 			for (int j = 0; j < L; j++)
-			{
 				ar >> maze[i][j];
-			}
-		}
 	}
 }
 

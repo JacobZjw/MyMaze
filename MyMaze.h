@@ -13,7 +13,7 @@
 class CMyMazeApp : public CWinApp
 {
 public:
-	CMyMazeApp() noexcept;
+	CMyMazeApp() ;
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 
